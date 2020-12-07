@@ -1,6 +1,6 @@
 <template>
     <div class="example">
-        <div v-drag-helper draggable style="width: 35px">
+        <div v-drag-helper.stay style="width: 35px">
             测试
         </div>
     </div>

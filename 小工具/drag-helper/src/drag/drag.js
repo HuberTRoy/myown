@@ -5,7 +5,11 @@ let drag = {}
 
 drag.install = () => {
     Vue.directive('drag-helper', {
-        bind(el) {
+        bind(el, binding) {
+            
+            // stay参数会将元素保持在对应的位置
+            const { stay } = binding.modifiers
+
             el.classList.add('drag-helper')
 
             let proxyData = new Proxy({}, {
@@ -77,7 +81,7 @@ drag.install = () => {
 
             el.addEventListener('touchstart', dragStart)
 
-            el.addEventListener('touchend', dragEnd)
+            !stay && el.addEventListener('touchend', dragEnd)
 
             el.addEventListener('touchmove', dragMove)
 
