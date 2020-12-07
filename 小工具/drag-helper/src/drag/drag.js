@@ -27,6 +27,7 @@ drag.install = () => {
             proxyData.move = false
             proxyData.side = false
             proxyData.righthand = false
+            proxyData.start = false
             proxyData.left = 0
             proxyData.top = 0
 
@@ -44,6 +45,7 @@ drag.install = () => {
             let dragStart = (e) => {
                 proxyData.move = false;
                 proxyData.side = false;
+                proxyData.start = true
                 clearTimeout(timer);
                 // top 与 left 对应此元素的左上角。
                 // 此时touch的clientX与Y减去左上角的x y 值对应的是鼠标点中位置的元素x y，eg: 点击的是正中间的位置，那移动时也应该看起来处于正中间。
@@ -54,7 +56,8 @@ drag.install = () => {
 
             let dragEnd = () => {
                 proxyData.move = false;
-    
+                proxyData.start = false
+
                 if (proxyData.left !== 0) {
                     if (proxyData.left < Math.floor(document.body.clientWidth / 2)) {
                         proxyData.left = 0;
@@ -72,6 +75,10 @@ drag.install = () => {
             }
 
             let dragMove = (e) => {
+                if (!proxyData.start) {
+                    return false
+                }
+
                 proxyData.move = true;
                 let touche = e.touches ?  e.touches[0] : e;
                 // 这里注意减去元素偏移量，让元素看起来处于正中间。
@@ -81,9 +88,24 @@ drag.install = () => {
 
             el.addEventListener('touchstart', dragStart)
 
-            !stay && el.addEventListener('touchend', dragEnd)
+            stay ? el.addEventListener('touchend', () => {
+                proxyData.start = false
+                proxyData.move = false
+            }) : el.addEventListener('touchend', dragEnd)
 
             el.addEventListener('touchmove', dragMove)
+            
+            
+            // Pc端操作逻辑
+            el.addEventListener('mousedown', dragStart)
+            el.addEventListener('mousemove', dragMove)
+            stay ? el.addEventListener('mouseup', () => {
+                proxyData.move = false;
+                proxyData.start = false
+            }) : el.addEventListener('mouseup', dragEnd)
+            
+            // mousemove触发有节流
+            el.addEventListener('mouseleave', dragMove)
 
         }
     })

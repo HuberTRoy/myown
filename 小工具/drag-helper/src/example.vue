@@ -1,6 +1,10 @@
 <template>
     <div class="example">
-        <div v-drag-helper.stay style="width: 35px">
+        <div v-drag-helper style="width: 99px; height: 99px">
+            测试
+        </div>
+
+        <div v-drag-helper.stays style="width: 99px; height: 99px">
             测试
         </div>
     </div>
