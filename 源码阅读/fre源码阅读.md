@@ -377,3 +377,71 @@ const commit = (fiber: IFiber): void => {
   refer(ref, node)
 }
 ```
+
+
+# hooks
+
+用前端框架写业务的两个核心一个是数据的处理，一个是数据的改变，上面的render和h是对数据进行处理后的渲染。hooks则是针对的数据的改变。
+
+hooks的调用时机在render中的updateHook，hooks是声明在函数组件一开始的，所以`let children = (WIP.type as FC<P>)(WIP.props)`时会首先执行hooks。
+
+
+```javascript
+export const useState = <T>(initState: T): [T, Dispatch<SetStateAction<T>>] => {
+  return useReducer(null, initState)
+}
+```
+
+```javascript
+export const useReducer = <S, A>(reducer?: Reducer<S, A>, initState?: S): [S, Dispatch<A>] => {
+  const [hook, current]: [any, IFiber] = getHook<S>(cursor++)
+  hook[0] = isFn(hook[1]) ? hook[1](hook[0]) : hook.length ? hook[1] : initState
+  return [
+    hook[0] as S,
+    (action: A | Dispatch<A>) => {
+      hook[1] = reducer ? reducer(hook[0], action as A) : action
+
+      // 这个不清楚是什么用，可能要配合其他hooks使用。  
+      hook[2] = reducer && (action as any).type[0] === '*' ? 0b1100 : 0b1000
+
+      // 这边重新进行渲染。   
+      dispatchUpdate(current)
+    },
+  ]
+}
+```
+
+useState其实是useReducer，useReducer的返回值是getHook的内容。
+
+```javascript
+export const getHook = <S = Function | undefined, Dependency = any>(cursor: number): [[S, Dependency], IFiber] => {
+  const current: IFiber<any> = getCurrentFiber()
+
+  // 这边对hooks进行了初始化赋值。
+  const hooks = current.hooks || (current.hooks = { list: [], effect: [], layout: [] })
+  
+  // cursor应该始终对应一组hooks，如果cursor与hooks的长度相同则表示当前cursor并不存在对应的hooks，下标从0开始。  
+  if (cursor >= hooks.list.length) {
+    hooks.list.push([] as IEffect)
+  }
+
+  // 第一个参数返回对应的hooks，第二个参数这里是获取到的node。  
+  return [(hooks.list[cursor] as unknown) as [S, Dependency], current]
+}
+```
+
+getCurrentFiber在render里updateHooks的时候会赋值当前的函数组件节点。
+
+
+# 暂时的结束
+
+比较粗糙的一次分析，弄通整个流程也是花了一些时间，内容理解的还不够细致，先写业务了，基于这次的分析大致已经梳理了一遍，下次从自己实现h方法开始重新进行一次。
+
+一开始的几个问题：
+
+1. render：由h方法从根节点开始抽象成一个AST，将根函数组件也作为一个子组件放置到其中，子组件通过递归的方式渲染，svg单独处理。
+
+2. hooks: 这里hooks只看了state，算是维护一个全局的vnode对象，里面有原值，set的时候会赋值传递进来的新值，之后和猜测的一致调用render从那个组件下重新渲染。
+
+3. 关于diff，在这个框架里没有看到有关于key的处理，应该是没有实现。
+
