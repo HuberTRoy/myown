@@ -353,6 +353,6 @@ try {
 # 最后
 (咳咳，又到了卑微求Star环节)
 
-完整代码在[Github](https://github.com/HuberTRoy/myown/tree/master/%E5%B0%8F%E5%B7%A5%E5%85%B7/vue3-luckdraw)Vue3，其他框架稍作迁移即可和Vue并没有强相关。
+完整代码在[Github](https://github.com/HuberTRoy/myown/tree/master/%E5%B0%8F%E5%B7%A5%E5%85%B7/vue3-luckdraw)，Vue3，其他框架稍作迁移即可和Vue并没有强相关。
 
 玩得开心~。
