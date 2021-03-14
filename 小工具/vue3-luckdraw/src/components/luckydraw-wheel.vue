@@ -171,7 +171,6 @@ export default defineComponent({
     width: 100%;
     border-radius: 50%;
     overflow: hidden;
-    transform: rotateZ(0);
 }
 
 .luckydraw-wheel-item {
