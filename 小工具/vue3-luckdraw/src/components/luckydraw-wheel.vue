@@ -62,10 +62,10 @@ export default defineComponent({
         //
         gap: {
             type: Number,
-            default: 1
+            default: 6
         }
     },
-    setup(props) {
+    setup(props, { emit }) {
         const luckyWrapper = ref(null)
         let animateSheet = ref(null)
         let startRotate = ref(false)
@@ -92,7 +92,7 @@ export default defineComponent({
                         (Math.tan((180 / props.prizes.length) * (Math.PI / 180)) *
                             props.prizes.length)}`
             return {
-                background: `${['red', 'orange', 'black'][index % 3]}`,
+                background: `${['pink', 'orange', 'black'][index % 3]}`,
                 height: `${props.height / 2}px`,
                 width: `${(Math.PI * props.height) / props.prizes.length}px`,
                 transform: `translateX(-50%) rotateZ(${(360 / props.prizes.length) * index}deg) translateY(-${props.height / 4 + props.gap / 2}px)`,
@@ -113,6 +113,7 @@ export default defineComponent({
             let result 
             try {
                 result = await props.startFunc()
+                // 发起Promise.reject()来终止。
             }catch(e) {
                 return
             }
@@ -138,12 +139,19 @@ export default defineComponent({
 			setTimeout(() => {
 				startRotate.value = true;
 				luckyWrapper.value.style.animation = 'rotate ease-in-out 7s';
+                
+                emit('start', {
+                    result
+                })
 
 				setTimeout(() => {
 
 					luckyWrapper.value.style.animation = '';
 					luckyWrapper.value.style.transform = `rotateZ(${angle.value}deg)`;
 					startRotate.value = false;
+                    emit('stop', {
+                        result: result
+                    })
 				}, 7000);
 			}, 100);
         }
@@ -171,6 +179,7 @@ export default defineComponent({
     width: 100%;
     border-radius: 50%;
     overflow: hidden;
+    transform: rotateZ(0);
 }
 
 .luckydraw-wheel-item {
