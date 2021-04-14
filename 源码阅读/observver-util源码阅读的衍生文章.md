@@ -1,8 +1,21 @@
-# 缘起
+---
+theme: mk-cute
+highlight: mk-cute
+---
 
-Vue3的响应式有个地方卡住了，听说这个是个五脏全的麻雀，起锅炖了。
+# 前言
+
+Vue3的响应式基于`Proxy`，对比Vue2中使用的`Object.definedProperty`的方式，使用`Proxy`在新增的对象以及数组的拦截上都有很好的支持。
+
+Vue3的响应式是一个独立的系统，可以抽离出来使用，那他到底是如何实现的呢？
+
+都知道有Getter和Setter，那Getter和Setter中分别都进行了哪些主要操作才能实现响应式呢？
+
+哼哼，带着这些问题一起来看看吧，文章会一步一步实现一个完整的响应式系统(误)~。
 
 # 开始
+
+[observer-util](https://github.com/nx-js/observer-util)这个库使用了与Vue3同样的思路编写，Vue3中的实现更加复杂，先从一个更加纯粹的库开始(我不会承认是因为Vue3中有些未看懂的，不会)。
 
 根据官网的例子：
 
@@ -18,16 +31,36 @@ counter.num++;
 
 这两个类似Vue3里的reactive和普通的响应式。
 
-这里有一个小思考是counter被Proxy封装之后，为什么countLogger就可以被counter收集到呢？
+`observable`之后的对象被添加了代理，之后`observe`中添加的响应函数会在依赖的属性改变时调用一次。
 
-只有一种方式就是通过observable里的getter做的添加。
+## 小小思考
 
-确实如此：
+这里粗略思考是一个订阅发布的模型，被`observable`代理之后的对象建立一个发布者仓库，`observe`这时候会订阅`counter.num`，之后订阅的内容改变时便会一一回调。
 
-整个执行逻辑是这样的：
+伪代码：
 
-1. observable 会为这个观察的对象添加一个handler，在get的handler中有一个`registerRunningReactionForOperation({ target, key, receiver, type: 'get' })`
 ```javascript
+// 添加监听
+xxx.addEventListener('counter.num', () => console.log(counter.num))
+// 改变内容
+counter.num++
+// 发送通知
+xxx.emit('counter.num', counter.num)
+```
+
+而响应式的核心也就是这个，添加监听与发送通知会经由`observable`和`observe`自动完成。
+
+## 代码实现
+
+经由上面的思考，在Getter里我们需要将`observe`传过来的回调添加到订阅仓库中。
+
+具体的实现中`observable`会为这个观察的对象添加一个`handler`，在Getter的`handler`中有一个`registerRunningReactionForOperation({ target, key, receiver, type: 'get' })`
+
+```javascript
+const connectionStore = new WeakMap()
+// reactions can call each other and form a call stack
+const reactionStack = []
+
 // register the currently running reaction to be queued again on obj.key mutations
 export function registerRunningReactionForOperation (operation) {
   // get the current reaction from the top of the stack
@@ -39,9 +72,10 @@ export function registerRunningReactionForOperation (operation) {
 }
 ```
 
-这个函数会获取出一个reaction，并且通过registerReactionForOperation保存。
+这个函数会获取出一个reaction(也就是observe传过来的回调)，并且通过registerReactionForOperation保存。
 
 ```javascript
+
 export function registerReactionForOperation (reaction, { target, key, type }) {
   if (type === 'iterate') {
     key = ITERATION_KEY
@@ -61,7 +95,7 @@ export function registerReactionForOperation (reaction, { target, key, type }) {
 }
 ```
 
-这里生成了一个set，根据key，也就是实际业务中get时候的key，将这个reaction添加进set中，整个的结构是这样的：
+这里生成了一个`Set`，根据key，也就是实际业务中get时候的key，将这个reaction添加进Set中，整个的结构是这样的：
 
 ```javascript
 connectionStore<weakMap>: {
@@ -120,7 +154,7 @@ export function runAsReaction (reaction, fn, context, args) {
 }
 ```
 
-在runAsReaction中，会将传入的reaction(也就是上面的`const reaction = function() { runAsReaction(reaction) }`)执行自己的包裹函数压入栈中，并且执行fn，这里的fn即我们想自动响应的函数，执行这个函数自然会触发get，此时的reactionStack中则会存在这个reaction。这里注意fn如果里面有异步代码的情况，try finally的执行顺序是这样的:
+在runAsReaction中，会将传入的reaction(也就是上面的`const reaction = function() { runAsReaction(reaction) }`)执行自己的包裹函数压入栈中，并且执行fn，这里的fn即我们想自动响应的函数，执行这个函数自然会触发get，此时的`reactionStack`中则会存在这个`reaction`。这里注意fn如果里面有异步代码的情况，try finally的执行顺序是这样的:
 
 ```javascript
 // 执行try的内容，
@@ -141,16 +175,14 @@ console.log(test())
 
 ```
 
-所以如果异步代码阻塞并且先于getter执行，那么就不会收集到这个依赖。
+所以如果异步代码阻塞并且先于Getter执行，那么就不会收集到这个依赖。
 
 
 # 模仿
 
-目标实现observable和observe。
+目标实现observable和observe以及衍生出来的Vue中的computed。
 
-observable和observe应成对出现。
-
-借用Vue3的思路，get时的操作称为`track`，set时的操作称为`trigger`。
+借用Vue3的思路，get时的操作称为`track`，set时的操作称为`trigger`，回调称为`effect`。
 
 先来个导图：
 
@@ -182,7 +214,9 @@ function observable(obj) {
 }
 ```
 
-这里我们只作了一层`Proxy`封装，像Vue中其实做的是一个递归的封装。区别是只做一层封装的话只能检测到外层的`=`操作，内层的如Array.push，或者嵌套的替换等都是无法经过set和get的。
+这里我们只作了一层`Proxy`封装，像Vue中应该会做一个递归的封装。
+
+区别是只做一层封装的话只能检测到外层的`=`操作，内层的如Array.push，或者嵌套的替换等都是无法经过set和get的。
 
 ## 实现track
 
@@ -214,7 +248,7 @@ function track(target, key, receiver?) {
 
 `targetMap`是一个`weakMap`，使用`weakMap`的好处是当我们`observable`的对象不存在其他引用的时候会正确的被垃圾回收掉，这一条链是我们额外建立的内容，原对象不存在的情况下不应该在继续存在。
 
-这里面最终会形成一个
+这里面最终会形成一个:
 
 ```javascript
 
@@ -356,7 +390,7 @@ let v = computed({
     },
 
     set: (val) => {
-        p.num = `要你命${val}`
+        p.num = `test computed setter${val}`
     }
 })
 
@@ -369,7 +403,18 @@ p.num++
 console.log(w.value)
 v.value = 3000
 console.log(w.value)
-// i am observe: 要你命3000
-// i am observe2: 要你命3000
-// 我是computed 1:要你命3000
+// i am observe: test computed setter3000
+// i am observe2: test computed setter3000
+// 我是computed 1:test computed setter3000
+w.value = 1000
+// 并没有为w设置setter所以并没有生效
+// 我是computed 1:test computed setter3000
+console.log(w.value)
 ```
+
+
+# 求赞时间~
+
+咳咳，漂亮姐姐说点赞的人会有好运哒。
+
+完整代码在[Github](https://github.com/HuberTRoy/myown/blob/master/%E5%B0%8F%E5%B7%A5%E5%85%B7/observable/observable.ts)，或者自行将上面的组合起来~。
