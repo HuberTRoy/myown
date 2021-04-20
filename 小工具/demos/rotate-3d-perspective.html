@@ -1,0 +1,243 @@
+<html>
+    <style>
+/* Shorthand classes for different perspective values */
+.pers250 {
+  perspective: 250px;
+}
+
+.pers350 {
+  perspective: 350px;
+}
+
+.pers500 {
+  perspective: 500px;
+}
+
+.pers650 {
+    animation: rotate 25s linear infinite;
+    /* transform: rotateY(90deg);*/
+    transform: rotateX(90deg);
+    width: 200/*replace*/px!important;
+    height: 200/*replace*/px!important;
+  /* perspective: 650px; */
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate3d(1,1,1,0);
+    }
+    to {
+        transform: rotate3d(1,1,1,10turn);
+    }
+}
+
+/* Define the container div, the cube div, and a generic face */
+.container {
+  width: 200px;
+  height: 200px;
+  margin: 75px 0 0 75px;
+  border: none;
+  perspective: 777px;
+  /* transform: rotateZ(-37deg); */
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  backface-visibility: visible;
+  perspective-origin: 150% 150%;
+  transform-style: preserve-3d;
+}
+
+.face {
+  display: block;
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border: none;
+  line-height: 100px;
+  font-family: sans-serif;
+  font-size: 60px;
+  color: white;
+  text-align: center;
+}
+
+/* Define each face based on direction */
+.front {
+  background: rgba(0, 0, 0, 0.3);
+  transform: translateZ(50px);
+}
+
+.back {
+  background: rgba(0, 255, 0, 1);
+  color: black;
+  transform: rotateY(180deg) translateZ(50px);
+}
+
+.right {
+  background: rgba(196, 0, 0, 0.7);
+  transform: rotateY(90deg) translateZ(50px);
+}
+
+.left {
+  background: rgba(0, 0, 196, 0.7);
+  transform: rotateY(-90deg) translateZ(50px);
+}
+
+.top {
+  background: rgba(196, 196, 0, 0.7);
+  transform: rotateX(90deg) translateZ(50px);
+}
+
+.bottom {
+  background: rgba(196, 0, 196, 0.7);
+  transform: rotateX(-90deg) translateZ(50px);
+}
+
+/* Make the table a little nicer */
+th, p, td {
+  background-color: #EEEEEE;
+  padding: 10px;
+  font-family: sans-serif;
+  text-align: left;
+}
+
+img {
+    position: absolute;
+    /* width: 127.5px;
+    height: 174px; */
+    /* display: none; */
+}
+
+.innerDiv {
+    position: absolute;
+}
+    </style>
+    <body>
+        <table>
+            <tbody>
+              <tr>
+                <th><code>perspective: 250px;</code>
+                </th>
+                <th><code>perspective: 350px;</code>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="container">
+                    <!-- <div class="cube pers250">
+                      <div class="face front">
+                          <img src="1.png" alt="">
+                      </div>
+                      <div class="face back">
+                          <img src="1.png" alt="">
+                      </div>
+                      <div class="face right">
+                          <img src="1.png" alt="">
+                      </div>
+                      <div class="face left">
+                          <img src="1.png" alt="">
+                      </div>
+                      <div class="face top">
+                          <img src="1.png" alt="">
+                      </div>
+                      <div class="face bottom">
+                          <img src="1.png" alt="">
+                      </div>
+                    </div>
+                  </div> -->
+                </td>
+                <td>
+                  <div class="container">
+                    <div class="cube pers350">
+                      <div class="face front">1</div>
+                      <div class="face back">2</div>
+                      <div class="face right">3</div>
+                      <div class="face left">4</div>
+                      <div class="face top">5</div>
+                      <div class="face bottom">6</div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <th><code>perspective: 500px;</code>
+                </th>
+                <th><code>perspective: 650px;</code>
+                </th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="container">
+                    <div class="cube pers500">
+                      <div class="face front">1</div>
+                      <div class="face back">2</div>
+                      <div class="face right">3</div>
+                      <div class="face left">4</div>
+                      <div class="face top">5</div>
+                      <div class="face bottom">6</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="container">
+                    <div class="cube pers650" id="t">
+                      <!-- <img src="1.png" alt="" style="width:100px;height:100px"> -->
+                      <!-- <div class="face front">1</div>
+                      <div class="face back">2</div>
+                      <div class="face right">3</div>
+                      <div class="face left">4</div>
+                      <div class="face top">5</div>
+                      <div class="face bottom">6</div> -->
+                    </div>
+                  </div>
+                  <script>
+                      let t = document.querySelector('#t')
+                      function img(width='100px',height='100px') {
+                        //   let i = document.createElement('img')
+                        //   i.src = '1.png'
+                        //   i.width = 100
+                        //   i.height = 100
+
+                        let i = document.createElement('div')
+                        i.className = 'innerDiv'
+                        i.style.width = width
+                        i.style.height = height
+                        i.style.borderRadius = '50%'
+                        i.style.background = 'black'
+                        return i
+                      }
+                      
+                      
+                      let base = 200/*replace*/
+                      let r = base / 2
+                      let c = -r
+                      // 基础坐标区间[-base/2, base/2]。
+                      let offset = 1
+                      for (let i=offset;i < base;i+=1){
+                        let half = (base + offset) / 2
+                        
+                        // 根据标准方程算出来
+                        let y = Math.sqrt((r*r) - (c*c))
+                        c += 1
+
+                        // 算出来的是半圆。
+                        let rect = y * 2
+                        // c += 0.1
+                        let j = img(`${rect}px`, `${rect}px`)
+                        if (i > half) {
+                            j.style.background = 'red'
+                        }
+                        // 后面那个是居中
+                        // z轴上根据区间排列
+                        j.style.transform = `translateZ(${c}px) translate(${(half - rect) / 2}px, ${(half - rect) / 2}px)`
+
+                        t.appendChild(j) 
+                      }
+                  </script>
+                </td>
+              </tr>
+            </tbody>
+          </table>  
+    </body>
+</html>
