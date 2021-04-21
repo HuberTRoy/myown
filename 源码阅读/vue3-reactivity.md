@@ -343,7 +343,7 @@ function createReactiveEffect<T = any>(
         enableTracking()
         effectStack.push(effect)
         activeEffect = effect
-        // 到这里render函数还未执行，trace也是，fn是传入的渲染函数，真正执行渲染时才会执行ref。
+        // 到这里render函数还未执行，trace也是，fn是传入的渲染函数，真正执行渲染时才会执行ref，执行ref后会触发相应的get，此时会把activeEffect放到targetMap中存起来。
         // 这时候activeEffect已经赋值为effect也就是reactiveEffect函数。
         return fn()
       } finally {
@@ -364,10 +364,6 @@ function createReactiveEffect<T = any>(
 }
 ```
 
-
-
-
-
 关于trigger阅读之前的理解：
 
 Vue中双向绑定的原理就是通过追踪set操作来改变其他用到了这个值的地方的值，如何拿到用到这个地方的值的那个地方需要用get来将这个值标记。
@@ -381,6 +377,7 @@ export function trigger(
   oldValue?: unknown,
   oldTarget?: Map<unknown, unknown> | Set<unknown>
 ) {
+
   // 先检查是否被track，这一步在上面的track中添加，取到的depsMap应是一个Map{value: Set(activeEffect)}
   const depsMap = targetMap.get(target)
   if (!depsMap) {
@@ -389,29 +386,16 @@ export function trigger(
   }
 
   const effects = new Set<ReactiveEffect>()
-  const computedRunners = new Set<ReactiveEffect>()
   const add = (effectsToAdd: Set<ReactiveEffect> | undefined) => {
     if (effectsToAdd) {
       effectsToAdd.forEach(effect => {
-        // Set中的内容做一个forEach
-        // 这边暂且把我绕晕了。
-        // 一会跑一跑打断点看一看。
-        if (effect !== activeEffect || !shouldTrack) {
-          if (effect.options.computed) {
-            computedRunners.add(effect)
-          } else {
-            effects.add(effect)
-          }
-        } else {
-          // the effect mutated its own dependency during its execution.
-          // this can be caused by operations like foo.value++
-          // do not trigger or we end in an infinite loop
+        if (effect !== activeEffect || effect.allowRecurse) {
+          effects.add(effect)
         }
       })
     }
   }
-  
-  // 这里type等于SET
+
   if (type === TriggerOpTypes.CLEAR) {
     // collection being cleared
     // trigger all effects for target
@@ -423,22 +407,40 @@ export function trigger(
       }
     })
   } else {
+    // 这一步会将SET等的回调加入一遍。
     // schedule runs for SET | ADD | DELETE
     if (key !== void 0) {
       add(depsMap.get(key))
     }
+
+    // 下面这些好像与DEV相关，ITERATE_KEY是const ITERATE_KEY = Symbol(__DEV__ ? 'iterate' : '')
+    // MAP_KEY_ITERATE_KEY const MAP_KEY_ITERATE_KEY = Symbol(__DEV__ ? 'Map key iterate' : '')
     // also run for iteration key on ADD | DELETE | Map.SET
-    const isAddOrDelete =
-      type === TriggerOpTypes.ADD ||
-      (type === TriggerOpTypes.DELETE && !isArray(target))
-    if (
-      isAddOrDelete ||
-      (type === TriggerOpTypes.SET && target instanceof Map)
-    ) {
-      add(depsMap.get(isArray(target) ? 'length' : ITERATE_KEY))
-    }
-    if (isAddOrDelete && target instanceof Map) {
-      add(depsMap.get(MAP_KEY_ITERATE_KEY))
+    switch (type) {
+      case TriggerOpTypes.ADD:
+        if (!isArray(target)) {
+          add(depsMap.get(ITERATE_KEY))
+          if (isMap(target)) {
+            add(depsMap.get(MAP_KEY_ITERATE_KEY))
+          }
+        } else if (isIntegerKey(key)) {
+          // new index added to array -> length changes
+          add(depsMap.get('length'))
+        }
+        break
+      case TriggerOpTypes.DELETE:
+        if (!isArray(target)) {
+          add(depsMap.get(ITERATE_KEY))
+          if (isMap(target)) {
+            add(depsMap.get(MAP_KEY_ITERATE_KEY))
+          }
+        }
+        break
+      case TriggerOpTypes.SET:
+        if (isMap(target)) {
+          add(depsMap.get(ITERATE_KEY))
+        }
+        break
     }
   }
 
@@ -461,9 +463,13 @@ export function trigger(
     }
   }
 
-  // Important: computed effects must be run first so that computed getters
-  // can be invalidated before any normal effects that depend on them are run.
-  computedRunners.forEach(run)
   effects.forEach(run)
-}
+
 ```
+
+
+这边在阅读解析了一个[轻量级的响应式库](./observer-util源码阅读.md)之后就理解了这里整个的思路，Vue这里写的思路与那个库一致。
+
+在实际使用中，computed或者模板编辑后相当于`observe`，将`fn`放到effectStack中，紧接着的触发的get会将它取出存到targetMap中，根据key保存起来，然后finally会将其在将其从缓冲的effectStack中删除。
+
+在对这个值进行了set操作时，便会触发trigger，trigger中会先根据触发的key收集一波应该回调的内容，之后一一回调。

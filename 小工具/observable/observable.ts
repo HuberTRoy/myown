@@ -127,8 +127,8 @@ function computed(fnOrOptions) {
     return new computedImpl(options)
 }
 
-let p = observable({num: 0})
-let j = observe(() => {console.log("i am observe:", p.num); return `i am observe: ${p.num}`})
+let p = observable({num: 0, test: 99})
+let j = observe(() => {console.log("i am observe:", p.num, p.test);})
 let e = observe(() => {console.log("i am observe2:", p.num)})
 let w = computed(() => { return '我是computed 1:' + p.num })
 let v = computed({

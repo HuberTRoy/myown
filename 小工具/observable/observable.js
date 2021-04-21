@@ -101,10 +101,10 @@ function computed(fnOrOptions) {
     }
     return new computedImpl(options);
 }
-var p = observable({ num: 0 });
-var j = observe(function () { console.log("i am observe:", p.num); return "i am observe: " + p.num; });
+var p = observable({ num: 0, test: 99 });
+var j = observe(function () { console.log("i am observe:", p.num, p.test); });
 var e = observe(function () { console.log("i am observe2:", p.num); });
-var w = computed(function () { return 'sss:' + p.num; });
+var w = computed(function () { return '我是computed 1:' + p.num; });
 var v = computed({
     get: function () {
         return 'test computed getter' + p.num;
