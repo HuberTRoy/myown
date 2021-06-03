@@ -1,0 +1,656 @@
+<!-- <script src="snap.js"></script> -->
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    body {
+        overflow: hidden;
+    }
+    :root {
+        --base-time: 0.3s;
+        --base-time2: 0.6s;
+        --base-time3: 0.9s;
+        /* --base-times: infinite; */
+        --base-times: 1;
+    }
+
+    div {
+        width: 100%;
+        height: 100%;
+    }
+    svg {
+        position: absolute;
+    }
+
+    #circle {
+        top: 75px;
+    }
+
+    #circle2 {
+        top: 20px;
+        left: 489px;
+        transform: rotate(-180deg);
+    }
+
+    #span1 {
+        font-size: 14px;
+        color: #FEAF2A;
+        background: #fff;
+        opacity: 0;
+        width: 100px;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: absolute;
+        left: 500px;
+        top: 31px;
+        animation-name: span1;
+        animation-delay: var(--base-time2);
+        animation-iteration-count: var(--base-times);
+        animation-duration: var(--base-time);
+        animation-fill-mode: forwards;
+        z-index: 2;
+    }
+
+    @keyframes span1 {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    #span2 {
+        position: absolute;
+        left: 450px;
+        top: 50px;
+        opacity: 0;
+        width: 50px;
+        height: 64px;
+        border-radius: 80px;
+        background: #43A2FD;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #fff;
+        padding: 15px;
+        padding-right: 32px;
+        box-sizing: border-box;
+
+        animation: span2 calc(var(--base-time) * 3) linear var(--base-time3) var(--base-times) forwards;
+    }
+
+    @keyframes span2 {
+        0% {
+            /* opacity: 0; */
+            left: 540px;
+            width: 50px;
+        }
+
+        50% {
+            left: 440px;
+            width: 150px;
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 1;
+            /* opacity: 1; */
+            left: 386px;
+            width: 150px;
+        }
+    }
+
+    #circle3 {
+        top: 116px;
+        left: 527px;
+    }
+
+    #span3 {
+        position: absolute;
+        left: 660px;
+        top: 176px;
+        width: 50px;
+        height: 72px;
+        opacity: 0;
+        border-radius: 80px;
+        background: #FE8048;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #fff;
+        padding: 15px;
+        padding-left: 27px;
+        padding-right: 17px;
+        box-sizing: border-box;
+
+        animation: span3 calc(var(--base-time) * 3) linear var(--base-time3) var(--base-times) forwards;
+
+    }
+
+    @keyframes span3 {
+        0% {
+            /* opacity: 0; */
+            left: 660px;
+            width: 50px;
+        }
+
+        50% {
+            left: 700px;
+            width: 156px;
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 1;
+            /* opacity: 1; */
+            left: 700px;
+            width: 156px;
+        }
+    }
+
+    #span4 {
+        font-size: 14px;
+        color: #FEAF2A;
+        background: #fff;
+        opacity: 0;
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: absolute;
+        left: 623px;
+        top: 161px;
+        animation-name: span1;
+        animation-delay: var(--base-time2);
+        animation-iteration-count: var(--base-times);
+        animation-duration: var(--base-time);
+        animation-fill-mode: forwards;
+        z-index: 2;
+    }
+
+    #span4::before {
+        content: '活动预热';
+        position: absolute;
+        width: 76px;
+        height: 76px;
+        z-index: 3;
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px 2px rgba(202,202,202,0.3);
+    }
+
+    #svg1 {
+        top: 130px;
+        left: 539px;
+    }
+
+    #svg2 {
+        top: 243px;
+        left: 592px;
+    }
+
+    #svg3 {
+        top: 247px;
+        left: 702px;
+    }
+
+    #svg4 {
+        top: 357px;
+        left: 702px;
+    }
+
+    #svg5 {
+        top: 395px;
+        left: 783px;
+        transform: rotate(180deg);
+    }
+
+    #circle4 {
+        top: 478px;
+        left: 852px;
+        transform: rotate(-90deg);
+    }
+
+    #lastLine {
+        top: 531px;
+        left: 974px;
+    }
+
+    .infoDiv {
+        position: absolute;
+        width: auto;
+        height: auto;
+    }
+
+    .infoDiv span:nth-child(1) {
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        overflow: hidden;
+        left: 0;
+        opacity: 0;
+        /* border-radius: 80px; */
+        border-radius: 50%;
+        background: #FE8048;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #fff;
+        padding: 15px;
+        padding-left: 27px;
+        padding-right: 17px;
+        box-sizing: border-box;
+        animation-fill-mode: forwards;
+        animation-timing-function: ease-out;
+        animation-duration: 0.8s;
+        animation-delay: var(--base-time3);
+        animation-iteration-count: var(--base-times);
+        animation-name: flagLeft;
+        color: transparent;
+        /* animation: span3 calc(var(--base-time) / 3) linear var(--base-time3) var(--base-times) forwards; */
+    }
+
+    .infoDiv span:nth-child(2){
+        font-size: 14px;
+        color: #FEAF2A;
+        background: #fff;
+        opacity: 0;
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        position: absolute;
+        animation-name: span1;
+        animation-delay: var(--base-time2);
+        animation-iteration-count: var(--base-times);
+        animation-duration: calc(var(--base-time));
+        animation-fill-mode: forwards;
+        z-index: 2;
+    }
+
+    .infoDiv span:nth-child(2)::before {
+        content: '';
+        position: absolute;
+        width: 76px;
+        height: 76px;
+        z-index: 3;
+        border-radius: 50%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px 2px rgba(202,202,202,0.3);
+    }
+
+    @keyframes flagLeft {
+        50% {
+            border-radius: 80px;
+            transform: translateX(-67%);
+        }
+        100% {
+            opacity: 1;
+            width: 260px;
+            height: 72p;
+            border-radius: 80px;
+            transform: translateX(-90%);
+        }
+    }
+
+    @keyframes flagRight {
+        100% {
+            opacity: 1;
+            width: 200px;
+            height: 72p;
+            border-radius: 80px;
+            transform: translateX(42%);
+        }
+    }
+</style>
+<div>
+
+    <svg id="circle" width="491" height="18" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <line class="line" x1="0" y1="9" x2="491" y2="9" stroke-width="18" stroke="#43A2FD"></line>
+        <style>
+            .line {
+                stroke: #43A2FD;
+                stroke-width: 12.8px;
+                stroke-dasharray: 491;
+    
+                animation-name: line;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+            }
+    
+            @keyframes line {
+                0% {
+                    stroke-dashoffset: 491;
+                }
+    
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+        </style>
+    </svg>
+    <svg id="circle2" width="122" height="122" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <circle class="circle" cx="61" cy="61" r="55" fill="transparent" stroke-width="5" stroke="black">
+        </circle>
+        <style>
+            .circle {
+                stroke: #FEAF2A;
+                stroke-width: 12.8px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation-name: diamondStroke;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+            @keyframes diamondStroke {
+                0%   { stroke-dashoffset: 1000; opacity: 1; }
+                100% { stroke-dashoffset: 660; opacity: 1;}
+            }
+        </style>
+    </svg>
+
+    <svg id="svg1" width="84px" height="93px" viewBox="-12 14 84 93" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <title>路径</title>
+        <g id="p'c" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="首页" transform="translate(-212.000000, -2899.000000)" >
+                <path class="line3" d="M295.133113,2899.93457 L295.133113,2963.88905 C295.133113,2979.18749 282.849932,2991.6183 267.603718,2991.86538 L267.140814,2991.86913 L234.404189,2991.86913" id="路径" transform="translate(253.971621, 2945.901849) scale(-1, 1) translate(-253.971621, -2945.901849) "></path>
+            </g>
+        </g>
+
+        <style>
+            .line3 {
+                stroke: #FEAF2A;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 137;
+                stroke-dashoffset: 133;
+                animation-name: line3;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+
+            @keyframes line3 {
+                0% {
+                    stroke-dashoffset: 133;
+                }
+
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+        </style>
+    </svg>
+
+    <svg id="circle3" width="206px" height="160px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <!-- <path class="line2" d="M18 18 V 90 H 82" stroke="#FEAF2A" stroke-width="18" fill="transparent" stroke-linejoin="round" stroke-linecap="round">
+        </path> -->
+        
+        <g class="g2">
+            <circle class="cl2" transform="rotate(180, 140, 90)" cx="140" cy="90" r="55" fill="transparent" stroke-width="12.8" stroke="black"></circle>
+        </g>
+
+        <style>
+            .cl2 {
+                stroke: #FEAF2A;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation-name: diamondStroke2;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+            
+            .line2 {
+                stroke: #FEAF2A;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 137;
+                stroke-dashoffset: 138;
+                animation-name: line2;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+
+            @keyframes line2 {
+                0% {
+                    stroke-dashoffset: 138;
+                }
+
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+
+            @keyframes diamondStroke2 {
+                100% {
+                    stroke-dashoffset: 740;
+                }
+            }
+        </style>
+    </svg>
+
+
+    <svg id="svg2" width="146px" height="146px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g class="g2">
+            <circle class="cl3" transform="rotate(360, 0, 0)" cx="73" cy="73" r="55" fill="transparent" stroke-width="12.8" stroke="#FE8048"></circle>
+        </g>
+
+        <style>
+            .cl3 {
+                stroke: #FE8048;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation-name: diamondStroke2;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+        </style>
+    </svg>
+
+
+    <svg id="svg3" width="146px" height="146px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g class="g2">
+            <circle class="cl4" transform="rotate(180, 73, 73)" cx="73" cy="73" r="55" fill="transparent" stroke-width="12.8" stroke="#54E7B3"></circle>
+        </g>
+
+        <style>
+            .cl4 {
+                stroke: #54E7B3;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation-name: diamondStroke2;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+        </style>
+    </svg>
+
+    <svg id="svg4" width="146px" height="146px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <g class="g2">
+            <circle class="cl5" transform="rotate(360, 73, 73)" cx="73" cy="73" r="55" fill="transparent" stroke-width="12.8" stroke="#43A2FD"></circle>
+        </g>
+
+        <style>
+            .cl5 {
+                stroke: #43A2FD;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation-name: diamondStroke2;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+        </style>
+    </svg>
+
+    <svg id="svg5" width="200px" height="93px" viewBox="-12 14 84 93" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <title>路径</title>
+        <g id="p'c" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="首页" transform="translate(-212.000000, -2899.000000)" >
+                <path class="line4" d="M295.133113,2899.93457 L295.133113,2963.88905 C295.133113,2979.18749 282.849932,2991.6183 267.603718,2991.86538 L267.140814,2991.86913 L234.404189,2991.86913 L234.404189,2991.86913 C222.59738,2991.86913 213.003715,2982.39767 212.813023,2970.64144 L212.81013,2970.2845" id="路径" transform="translate(253.971621, 2945.901849) scale(-1, 1) translate(-253.971621, -2945.901849) "></path>
+            </g>
+        </g>
+
+        <style>
+            .line4 {
+                stroke: #43A2FD;
+                stroke-width: 18px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 178;
+                stroke-dashoffset: 178;
+                animation-name: line4;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+
+            @keyframes line4 {
+                0% {
+                    stroke-dashoffset: 178;
+                }
+
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+        </style>
+    </svg>
+
+    <svg id="circle4" width="122" height="122" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <circle class="circle5" cx="61" cy="61" r="55" fill="transparent" stroke-width="5" stroke="black">
+        </5>
+        <style>
+            .circle5 {
+                stroke: #43A2FD;
+                stroke-width: 12.8px;
+                stroke-linejoin: round;
+                stroke-linecap: round;
+                stroke-dasharray: 1000;
+                stroke-dashoffset: 1000;
+                animation-name: diamondStroke;
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-delay: var(--base-time);
+                animation-fill-mode:forwards;
+            }
+            @keyframes diamondStroke {
+                0%   { stroke-dashoffset: 1000; opacity: 1; }
+                100% { stroke-dashoffset: 660; opacity: 1;}
+            }
+        </style>
+    </svg>
+
+    <svg id="lastLine" width="800" height="18" version="1.1" xmlns="http://www.w3.org/2000/svg">
+        <line class="lastLine" x1="0" y1="9" x2="800" y2="9" stroke-width="18" stroke="#43A2FD"></line>
+        <style>
+            .lastLine {
+                stroke: #FE8048;
+                stroke-width: 12.8px;
+                stroke-dasharray: 800;
+                stroke-dashoffset: 800;
+                animation-name: line;
+                animation-delay: calc(var(--base-time2));
+                animation-duration: var(--base-time);
+                animation-iteration-count: var(--base-times);
+                animation-fill-mode: forwards;
+            }
+    
+            @keyframes line {
+                0% {
+                    stroke-dashoffset: 800;
+                }
+    
+                100% {
+                    stroke-dashoffset: 0;
+                }
+            }
+        </style>
+    </svg>
+
+    <span id="span1">渠道引流</span>
+
+    <span id="span2">微信、H5、App、小程序</span>
+
+    <span id="span3">海报分享、微信群通知、朋友圈宣传</span>
+
+    <span id="span4">活动预热</span>
+
+    <div class="infoDiv" style="left: 620px;top: 271px;">
+        <span style="background:#54E7B3;">图文、视频结合、3D虚拟演示、客服答疑</span>
+
+        <span>直播展示</span>
+    </div>
+
+    <div class="infoDiv" style="left: 731px;top: 271px;">
+        <span style="background:#43A2FD;animation-name: flagRight;">红包雨、秒杀、盲盒</span>
+
+        <span>营销互动</span>
+    </div>
+
+    <div class="infoDiv" style="left: 731px;top: 387px;">
+        <span style="background:#FEAF2A;">微信支付、订单管理、发票管理</span>
+
+        <span>商城下单</span>
+    </div>
+
+    <div class="infoDiv" style="left: 869px;top: 493px;">
+        <span style="background:#54E7B3;animation-name: flagRight;">分享有赏、优惠券、消息推送</span>
+
+        <span>分享复购</span>
+    </div>
+
+
+</div>
