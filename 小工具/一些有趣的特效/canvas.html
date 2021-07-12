@@ -1,0 +1,86 @@
+<body>
+    <canvas id="ex1"></canvas>
+</body>
+<script>
+    var x =  0;
+    var y = 15;
+    var speed = 5;
+
+    function clearWithTail(context) {
+        context.fillStyle = 'rgba(255,255,255,0.3)'
+        context.fillRect(0, 0, 500, 170);
+    }
+
+    class Snow {
+        // Snow 可以选择大小，下落速度，下落角度
+        constructor (context, config={}) {
+            this.context = context
+            this.config = {
+                x: -5,
+                y: -5,
+                size: 5,
+                speed: 1,
+                angle: 0,
+                // 可以部分覆盖
+                ...config
+            }
+            
+            this.snow()
+            // this.snowImg = new Image()
+            // this.snowImg.src = ''
+        }
+
+        snow() {
+            let { x,y,size } = this.config
+            // clearWithTail(this.context)
+            this.context.beginPath();
+            this.context.arc(x, y, size, 0, 2 * Math.PI);
+            this.context.fillStyle = 'pink'
+            this.context.fill()
+        }
+
+        move() {
+            this.config.x += this.config.speed
+            this.config.y += this.config.speed
+            this.snow()
+
+            // window.requestAnimationFrame(this.animation.bind(this))
+        }
+
+        moveOrReset() {
+            if (this.config.x > this.context.canvas.width || this.config.y > this.context.canvas.height) {
+                this.config.x = -5
+                this.config.y = -5
+            }
+            this.move()
+            // this.snow()
+        }
+    }
+
+    function draw() {
+        var canvas  = document.getElementById("ex1");
+        var context = canvas.getContext("2d");
+        let snows = new Array(100).fill(0)
+
+        snows = snows.map((item) => new Snow(context))
+
+        const animation = () => {
+            clearWithTail(context)
+
+            snows.map((i) => {
+                i.moveOrReset()
+            })
+
+            window.requestAnimationFrame(animation)
+        }
+
+        animation()
+        // let snow = new Snow(context)
+        // let snow2 = new Snow(context)
+        // snow.animation()
+        // snow2.animation()
+    }
+
+    draw()
+    // animate();
+</script>
