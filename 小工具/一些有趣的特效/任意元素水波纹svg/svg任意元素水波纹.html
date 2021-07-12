@@ -1,0 +1,139 @@
+<body>
+    <!-- 注意一下这个文件，需要跑http服务，否则svg内feImage生效，不过feDisplacementMap不生效。 -->
+    <svg class="svg-filters" style="display:none">
+        <defs>
+            <filter id="filter-ripple-1">
+                <feImage id="svgFeImage" xlink:href="./ripple-gray.png" x="0" y="0" width="0" height="0" result="ripple"></feImage>
+                <feDisplacementMap id="feMap" xChannelSelector="R" yChannelSelector="G" color-interpolation-filters="sRGB" in="SourceGraphic" in2="ripple" scale="0"></feDisplacementMap>
+                <feComposite operator="in" in2="ripple"></feComposite>
+                <!-- 这个看情况
+                     上面那个是filter，
+                     下面那个是原图，有filter的时候是否显示原图，具体效果多调整。
+                -->
+                <!-- <feComposite in2="SourceGraphic"></feComposite> -->
+            </filter>
+        </defs>
+    </svg>
+    
+    <div style="display: flex;">
+        <button id="button" type="button" class="element ui-button ui-button-primary" style="">click me</button>
+        <span style="flex-grow:1"></span>
+        <img class="target" src="./vue.png">
+    </div>
+    <script>
+        let ele = document.querySelector('.element')
+        let img = document.querySelector('.target')
+        const waterWrapper = () => {
+            let waters = []
+            return (e) => {
+                waters.map((item) => item.cacel())
+                waters = []
+                waters.push(water(e))
+            }
+        }
+
+        const waterf = waterWrapper()
+
+        img.onclick = waterf
+        ele.onclick = waterf
+
+        function water(e) {
+            let processing = true
+            let feMap = document.querySelector('#feMap')
+            let svgFeImage = document.querySelector('#svgFeImage')
+            let scale = 10
+            let size = 0
+            let speed = 0.2
+            let { offsetX, offsetY } = e
+            let { clientWidth, clientHeight } = e.target
+            clientWidth *= 2
+            e.target.style = 'filter: url(#filter-ripple-1);'
+            let max = 20
+            let times = clientWidth / (max / speed) * 2
+
+            let state = false
+            // 一个分两段的动画，
+            // 前一段scale逐渐增加
+            // 后一段scale逐渐减少
+            // 主要的视觉效果由前段动画完成。
+            // 后段动画主要是为了恢复平静时更加平滑。
+            let p = () => {
+                if (!processing) {
+                    return
+                }
+
+                if (scale < max && !state) {
+                    scale += speed
+                    size += times 
+                    feMap.scale.baseVal = scale
+                    svgFeImage.height.baseVal.value = size
+                    svgFeImage.width.baseVal.value = size
+                    svgFeImage.x.baseVal.value = offsetX - size / 2
+                    svgFeImage.y.baseVal.value = offsetY - size / 2
+                    if (scale >= max) {
+                        state = true
+                    }
+                    window.requestAnimationFrame(p)
+                    return
+                } else if (scale > 0) {
+                    scale -= speed * 5
+                    feMap.scale.baseVal = scale
+                    size += times
+                    svgFeImage.height.baseVal.value = size
+                    svgFeImage.width.baseVal.value = size
+                    svgFeImage.x.baseVal.value = offsetX - size / 2
+                    svgFeImage.y.baseVal.value = offsetY - size / 2
+                    window.requestAnimationFrame(p)
+                    return
+                }
+
+                e.target.style = ''
+            }
+
+            p()
+
+            return {
+                cacel: () => {
+                    processing = false
+                    e.target.style = ''
+                }
+            }
+        }
+
+    </script>
+</body>
+
+<style>
+.element {
+    display: inline-block;
+    line-height: 20px;
+    font-size: 14px;
+    text-align: center;
+    color: #4c5161;
+    border: 1px solid #d0d0d5;
+    border-radius: 4px;
+    padding: 9px 15px;
+    width: 74px;
+    height: 40px;
+    min-width: 50px;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    text-decoration: none;
+    -webkit-transition: border-color .15s,background-color .15s,opacity .15s;
+    transition: border-color .15s,background-color .15s,opacity .15s;
+    cursor: pointer;
+    overflow: visible;
+    outline: none;
+}
+
+.target {
+    overflow: hidden;
+    /* filter: url(#filter-ripple-1); */
+}
+
+.element:hover {
+
+}
+</style>
+
