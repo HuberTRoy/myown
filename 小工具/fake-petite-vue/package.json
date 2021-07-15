@@ -1,0 +1,12 @@
+{
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview"
+  },
+  "devDependencies": {
+    "typescript": "4.3.4",
+    "vite": "2.3.8"
+  }
+}

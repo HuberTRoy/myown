@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+    <div id="app">
+        <div v-data="controller">
+            <div v-show="open">"" + (){{ msg }} {{ open }}()</div>
+            <div v-show="open" v-red>456 {{ msg }} + 4 6</div>
+
+            <button @click="open = !open">
+                toggle me
+            </button>
+        </div>
+
+    </div>
+    <script type="module">
+        import { createApp, observable,observe } from './src/main.ts'
+        
+        let app = createApp()
+        app.data("controller", () => {
+            return {
+                open: true,
+                msg: 'hello template'
+            }
+        })
+        app.mount('#app')
+
+        // window.shadow = observable
+        // window.shadow2 = observe
+    </script>
+  </body>
+</html>

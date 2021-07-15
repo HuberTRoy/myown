@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "sourceMap": false,
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "allowJs": false,
+        "strict": true,
+        "noUnusedLocals": true,
+        "rootDir": ".",
+        "types": ["vite/client"],
+        "baseUrl": "./src",
+        "paths": {
+             "@/*": ["*"]
+        }
+    },
+    "include": [
+        "src"
+    ]
+}
+
+  
