@@ -42,6 +42,8 @@
 
 - [任意元素添加水波纹svg](小工具/一些有趣的特效/任意元素水波纹svg/svg任意元素水波纹.html)
 
+- [红包雨svg](小工具/一些有趣的特效/红包雨svg/index.html)
+
 - [svg stroke-dasharray做动画小例(可以做一些有趣的图标描边显隐)](小工具/svg初体验/index.html)
 
 - [SVG指南(译)](https://github.com/HuberTRoy/svgTutorial)

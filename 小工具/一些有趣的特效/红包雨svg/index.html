@@ -1,0 +1,101 @@
+<html>
+    <style>
+        #svgboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <body>
+        <svg id="svgboard" version="1.1" xmlns="http://www.w3.org/2000/svg">
+            <!-- 
+                注意svg内元素的旋转，需要设置transform-box:fill-box和transform-origin:center;之后transform rotate的行为与css一直，否则需要提供另外两个参数指定选择的中心点。
+            -->
+        </svg>
+    </body>
+    <script>
+        // 正常来讲红包雨一般都会用Canvas去写，不过用SVG来写往往更加简单。
+        // 用框架写的话会更加简单一些。
+        // 这里直接用Js撸了，也一样。
+        // 添加监听事件之类的也比canvas来的方便一些。
+        // P.s 可在微信公众号内直接插入SVG。
+
+        const getX = (box=new Array(), config = {}) => {
+            // box可传引用，也可以return。
+            let maxX = document.documentElement.clientWidth
+
+            config = {
+                num: 15,
+                minWidth: 104,
+                maxWidth: 146,
+                minHeight: 145,
+                maxHeight: 204,
+                durBase: 10,
+                imageLink: 'bg.png',
+                ...config,
+            };
+            let { num, minWidth, maxWidth, minHeight, maxHeight, durBase, imageLink } = config;
+            for (let i = 0; i < num; i++) {
+                let height = Math.random() * (maxHeight - minHeight) + minHeight;
+
+                box.push({
+                    key: +new Date() + Math.random() + i,
+                    width: Math.random() * (maxWidth - minWidth) + minWidth,
+                    height: height,
+                    x: Math.random() * maxX + 1,
+                    y: `-${height}`,
+                    dur: Math.random() * durBase + 1,
+                    imageLink: imageLink
+                });
+            }
+
+            return box
+        };
+
+        function createSVGElement(elementName) {
+            let node = document.createElementNS('http://www.w3.org/2000/svg', elementName)
+
+            return node
+        }
+
+        function setAnimation(board, lists) {
+            let maxY = document.documentElement.clientHeight
+            for (let item of lists) {
+                let image = createSVGElement('image')
+                image.addEventListener('click', () => {
+                    // alert会阻塞住整个渲染进程，但动画好像还在继续。
+                    // 这里最好用Promise直接写一个弹窗。
+                    alert('哦吼，红包1个亿')
+                })
+                image.setAttribute('href', item.imageLink)
+                image.setAttribute('width', item.width)
+                image.setAttribute('height', item.height)
+                image.setAttribute('style', 'transform-box: fill-box; transform-origin: center; cursor: pointer')
+                image.setAttribute('transform', 'rotate(25)')
+                let motion = createSVGElement('animateMotion')
+                motion.setAttribute('path', `M ${item.x} ${item.y} L ${item.x - 500} ${maxY + 500}`)
+                motion.setAttribute('begin', '0s')
+                motion.setAttribute('dur', `${item.dur}s`)
+                motion.setAttribute('repeatCount', 'indefinite')
+
+                image.appendChild(motion)
+
+                board.appendChild(image)
+            }
+        }
+
+        function insertImage() {
+            let board = document.querySelector('#svgboard')
+            let bgArguments = getX()
+            let starArguments = getX(new Array(), {minWidth: 21, maxWidth: 21, minHeight: 21, maxHeight: 21, imageLink: 'star.png'})
+            let lineArguments = getX(new Array(), { num: 13, minWidth: 16, maxWidth: 16, minHeight: 114, maxHeight: 114, imageLink: 'line.png'})
+            setAnimation(board, bgArguments)
+            setAnimation(board, starArguments)
+            setAnimation(board, lineArguments)
+        }
+
+        insertImage()
+    </script>
+</html>
