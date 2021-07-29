@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <rect x="10" y="10" height="50" width="50"
+          rx="5" ry="5"
+          style="stroke:#006600; fill: #00cc00"/>
+    <rect x="70" y="10" height="50" width="50"
+          rx="10" ry="10"
+          style="stroke:#006600; fill: #00cc00"/>
+    <rect x="130" y="10" height="50" width="50"
+          rx="15" ry="15"
+          style="stroke:#006600; fill: #00cc00"/>
+</svg>

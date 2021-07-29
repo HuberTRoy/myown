@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <polygon points="50,5   100,5  125,30  125,80 100,105
+                   50,105  25,80  25, 30"
+          style="stroke:#660000; fill:#cc3333; stroke-width: 3;"/>
+
+</svg>

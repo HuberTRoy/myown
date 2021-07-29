@@ -10,17 +10,9 @@
     </style>
     <body>
         <svg id="svgboard" version="1.1" xmlns="http://www.w3.org/2000/svg">
-            <!-- 
-                注意svg内元素的旋转，需要设置transform-box:fill-box和transform-origin:center;之后transform rotate的行为与css一直，否则需要提供另外两个参数指定选择的中心点。
-            -->
         </svg>
     </body>
     <script>
-        // 正常来讲红包雨一般都会用Canvas去写，不过用SVG来写往往更加简单。
-        // 用框架写的话会更加简单一些。
-        // 这里直接用Js撸了，也一样。
-        // 添加监听事件之类的也比canvas来的方便一些。
-        // P.s 可在微信公众号内直接插入SVG。
 
         const getX = (box=new Array(), config = {}) => {
             // box可传引用，也可以return。

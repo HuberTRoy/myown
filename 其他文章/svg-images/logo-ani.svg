@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+    <polygon points="165,0 180,15 165,30 150,15" fill="#1E80FF"></polygon>
+    <polyline class="line" points="141,24 165,40 189,24" style="fill:none;stroke-width: 7px;stroke:#1E80FF"></polyline>
+    <polyline class="line2" points="130.5,35.5 165,55 199.5,35.5" style="fill:none;stroke-width: 7px;stroke:#1E80FF"></polyline>
+
+    <style>
+        .line {
+            stroke-dasharray: 59;
+            stroke-dashoffset: 59;
+
+            animation: show 2s linear infinite;
+            animation-fill-mode: forwards;
+        }
+
+        .line2 {
+            stroke-dasharray: 79;
+            stroke-dashoffset: 79;
+
+            animation: show2 2s linear infinite;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes show {
+            0% {
+                stroke-dashoffset: 59;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes show2 {
+            0% {
+                stroke-dashoffset: 79;
+            }
+
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+</svg>
