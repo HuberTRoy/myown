@@ -50,7 +50,7 @@
 
 # canvas
 
-- [一个canvas demo](小工具/一些有趣的特效/canvas.html)
+- [从零开始实现一个图片裁剪工具](https://juejin.cn/post/7024368216826724359)
 
 # Wireshark抓包分析
 
