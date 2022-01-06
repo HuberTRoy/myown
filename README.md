@@ -23,7 +23,7 @@
 
 - [petite-vue源码阅读+仿写(已实现模板解析，data响应式，v-show，@事件功能)](源码阅读/petite-vue源码阅读+仿写.md)
 
-- [petite-vue的仿写](小工具/fake-petite-vue)
+- [petite-vue的仿写](https://github.com/HuberTRoy/fake-petite-vue)
 
 
 # 框架向工具
