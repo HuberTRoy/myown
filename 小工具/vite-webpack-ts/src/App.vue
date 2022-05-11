@@ -8,6 +8,7 @@
 
 <script lang="ts" setup>
 const a = ref(1);
+const b = ref(1);
 </script>
 
 <style lang="less">
