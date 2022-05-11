@@ -7,8 +7,13 @@
 </template>
 
 <script lang="ts" setup>
-const a = ref(1);
-const b = ref(1);
+import { getInfo } from "./api/test";
+
+const a = ref("1");
+const getInfoAsync = async () => {
+  const { data } = await getInfo();
+  a.value = data?.content?.title;
+};
 </script>
 
 <style lang="less">

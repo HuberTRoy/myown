@@ -5,19 +5,25 @@
     "strict": true,
     "jsx": "preserve",
     "moduleResolution": "node",
+    "experimentalDecorators": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
+    "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
+    "noEmitOnError": true,
+    "noEmit": true,
+    "noImplicitAny": false,
     "paths": {
-      "@/*": ["src/*"],
-      "store/*": ["src/store/*"]
+      "@/*": [
+        "src/*"
+      ],
+      "store/*": [
+        "src/store/*"
+      ]
     },
     "lib": [
       "esnext",
@@ -31,9 +37,11 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "./src/types/auto-imports.d.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "public/lib"
   ]
 }

@@ -1,0 +1,8 @@
+node_modules
+dist
+src/*/*.d.ts
+src/iconfont/**
+src/example/**
+auto-imports.d.ts
+components.d.ts
+**/lib/*.js
