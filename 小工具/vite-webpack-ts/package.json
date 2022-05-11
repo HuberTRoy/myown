@@ -1,8 +1,9 @@
 {
-  "name": "vite-webpack-ts",
+  "name": "project-for-artical",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "vite --mode dev",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
@@ -36,10 +37,34 @@
     "prettier": "^2.4.1",
     "typescript": "~4.5.5"
   },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended",
+      "@vue/typescript/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2020
+    },
+    "rules": {}
+  },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
-    "*.{js,jsx,vue,ts,tsx}": ["vue-cli-service lint"]
-  }
+    "*.{js,jsx,vue,ts,tsx}": [
+      "vue-cli-service lint"
+    ]
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
+  ]
 }
