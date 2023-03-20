@@ -8,6 +8,13 @@
 
 - [一个性能优化脑图](web程序优化思路.pdf)
 
+# TypeScript 类型
+
+包含自己理解/求证溯源的过程~。
+
+- [TypeScript 类型体操 1](https://juejin.cn/post/7206208345605849149)
+- [TypeScript 类型体操 2](https://juejin.cn/post/7209826725366366265)
+
 # 源码阅读
 
 里面是一些自己解读的思考混有一些仿写。
