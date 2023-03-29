@@ -12,8 +12,9 @@
 
 包含自己理解/求证溯源的过程~。
 
-- [TypeScript 类型体操 1](https://juejin.cn/post/7206208345605849149)
+- [TypeScript 类型体操 1 遍历，推断，基础类型](https://juejin.cn/post/7206208345605849149)
 - [TypeScript 类型体操 2](https://juejin.cn/post/7209826725366366265)
+- [TypeScript 类型体操 3 深入联合类型](https://juejin.cn/post/7209826725366366265)
 
 # 框架向工具
 
